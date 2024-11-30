@@ -5,22 +5,18 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export default function ListScreen({ navigation }) {
   const [produtos, setProdutos] = useState([]);
-
-  // Função para carregar todos os produtos
   const getProdutos = async () => {
     const db = await SQLite.openDatabaseAsync('estoqueDB');
     const rows = await db.getAllAsync('SELECT * FROM estoque');
     setProdutos(rows);
   };
-
   useFocusEffect(() => {
-    getProdutos(); // Carrega os produtos sempre que a tela é focada
+    getProdutos();
   });
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Lista de Produtos</Text>
-
       <FlatList
         data={produtos}
         keyExtractor={(item) => item.id.toString()}
@@ -32,7 +28,6 @@ export default function ListScreen({ navigation }) {
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Atualizar')}>
           <Text style={styles.buttonText}>Atualizar Quantidades</Text>
@@ -70,7 +65,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 3, // Para efeito de sombra no Android
+    elevation: 3,
   },
   itemText: {
     fontSize: 18,

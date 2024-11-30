@@ -4,26 +4,23 @@ import * as SQLite from 'expo-sqlite';
 
 export default function DeleteScreen({ navigation }) {
   const [produtos, setProdutos] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);  // Estado para controlar o carregamento
+  const [isLoading, setIsLoading] = useState(false); 
 
-  // Função para carregar todos os produtos
   const getProdutos = async () => {
     const db = await SQLite.openDatabaseAsync('estoqueDB');
     const rows = await db.getAllAsync('SELECT * FROM estoque');
     setProdutos(rows);
   };
 
-  // Função para excluir um produto
   const excluirProduto = async (id) => {
-    setIsLoading(true); // Ativa o carregamento
+    setIsLoading(true); 
     const db = await SQLite.openDatabaseAsync('estoqueDB');
     await db.runAsync('DELETE FROM estoque WHERE id = ?', [id]);
-    getProdutos(); // Recarrega os produtos
-    setIsLoading(false); // Desativa o carregamento
+    getProdutos();
+    setIsLoading(false); 
     Alert.alert("Produto excluído com sucesso!");
   };
 
-  // Função para confirmar a exclusão com um alerta
   const confirmExclusao = (id, nome) => {
     Alert.alert(
       "Excluir Produto",
@@ -45,7 +42,7 @@ export default function DeleteScreen({ navigation }) {
         PRAGMA journal_mode = WAL;
         CREATE TABLE IF NOT EXISTS estoque (id INTEGER PRIMARY KEY NOT NULL, produto_nome TEXT NOT NULL, quantidade INTEGER NOT NULL);
       `);
-      getProdutos(); // Carrega os produtos na inicialização
+      getProdutos();
     }
     setup();
   }, []);
@@ -53,7 +50,7 @@ export default function DeleteScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Excluir Produto</Text>
-      {isLoading ? (  // Exibe indicador de carregamento enquanto processa a exclusão
+      {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
       ) : (
         <FlatList
@@ -65,7 +62,7 @@ export default function DeleteScreen({ navigation }) {
               <Button
                 title="Excluir"
                 onPress={() => confirmExclusao(item.id, item.produto_nome)}
-                color="#e74c3c"  // Cor vermelha para excluir
+                color="#e74c3c" 
               />
             </View>
           )}
@@ -102,7 +99,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    elevation: 3,  // Sombra no Android
+    elevation: 3,  
   },
   itemText: {
     fontSize: 18,

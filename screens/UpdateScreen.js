@@ -5,18 +5,14 @@ import * as SQLite from 'expo-sqlite';
 export default function UpdateScreen({ navigation }) {
   const [produtos, setProdutos] = useState([]);
 
-  // Função para carregar todos os produtos
   const getProdutos = async () => {
     const db = await SQLite.openDatabaseAsync('estoqueDB');
     const rows = await db.getAllAsync('SELECT * FROM estoque');
     setProdutos(rows);
   };
 
-  // Função para atualizar todas as quantidades de uma vez
   const updateQuantidades = async () => {
     const db = await SQLite.openDatabaseAsync('estoqueDB');
-
-    // Atualiza a quantidade de todos os produtos
     for (const produto of produtos) {
       if (produto.novaQuantidade !== undefined && produto.novaQuantidade !== '') {
         await db.runAsync(
@@ -25,10 +21,9 @@ export default function UpdateScreen({ navigation }) {
         );
       }
     }
-    getProdutos(); // Recarrega os produtos
-    alert("Quantidades atualizadas com sucesso!");
 
-    // Volta para a tela anterior
+    getProdutos();
+    alert("Quantidades atualizadas com sucesso!");
     navigation.goBack();
   };
 
@@ -39,12 +34,11 @@ export default function UpdateScreen({ navigation }) {
         PRAGMA journal_mode = WAL;
         CREATE TABLE IF NOT EXISTS estoque (id INTEGER PRIMARY KEY NOT NULL, produto_nome TEXT NOT NULL, quantidade INTEGER NOT NULL);
       `);
-      getProdutos(); // Carrega os produtos na inicialização
+      getProdutos();
     }
     setup();
   }, []);
 
-  // Função para renderizar cada item (produto) com campo de quantidade editável
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Text style={styles.productName}>{item.produto_nome}</Text>
@@ -58,7 +52,7 @@ export default function UpdateScreen({ navigation }) {
           setProdutos(newProdutos);
         }}
         keyboardType="numeric"
-        clearButtonMode="while-editing"  // Adiciona um botão de limpar enquanto edita
+        clearButtonMode="while-editing" 
       />
     </View>
   );
@@ -66,19 +60,16 @@ export default function UpdateScreen({ navigation }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
+      style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.innerContainer}>
           <Text style={styles.title}>Atualizar Quantidades de Produtos</Text>
-          
           <FlatList
             data={produtos}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
-            keyboardShouldPersistTaps="handled" // Garante que o teclado não atrapalhe
+            keyboardShouldPersistTaps="handled"
           />
-          
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.button} onPress={updateQuantidades}>
               <Text style={styles.buttonText}>Salvar Alterações</Text>
