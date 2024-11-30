@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "projeto_estoque_2",
-    "slug": "projeto_estoque_2",
+    "name": "controle_estoque_cafe",
+    "slug": "controle_estoque_cafe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,6 +23,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-sqlite"
+    ]
   }
 }
